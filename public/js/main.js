@@ -1,239 +1,168 @@
-(function ($) {
-    "use strict";
-    
-    // Dropdown on mouse hover
-    $(document).ready(function () {
-        function toggleNavbarMethod() {
-            if ($(window).width() > 768) {
-                $('.navbar .dropdown').on('mouseover', function () {
-                    $('.dropdown-toggle', this).trigger('click');
-                }).on('mouseout', function () {
-                    $('.dropdown-toggle', this).trigger('click').blur();
-                });
-            } else {
-                $('.navbar .dropdown').off('mouseover').off('mouseout');
-            }
-        }
-        toggleNavbarMethod();
-        $(window).resize(toggleNavbarMethod);
-    });
-    
-    
-    // Back to top button
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 100) {
-            $('.back-to-top').fadeIn('slow');
-        } else {
-            $('.back-to-top').fadeOut('slow');
-        }
-    });
-    $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
-        return false;
-    });
-    
-    
-    // Header slider
-    $('.header-slider').slick({
-        autoplay: true,
-        dots: true,
-        infinite: true,
-        slidesToShow: 1,
-        slidesToScroll: 1
-    });
-    
-    
-    // Product Slider 4 Column
-    $('.product-slider-4').slick({
-        autoplay: true,
-        infinite: true,
-        dots: false,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        responsive: [
-            {
-                breakpoint: 1200,
-                settings: {
-                    slidesToShow: 4,
-                }
-            },
-            {
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 3,
-                }
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 2,
-                }
-            },
-            {
-                breakpoint: 576,
-                settings: {
-                    slidesToShow: 1,
-                }
-            },
-        ]
-    });
-    
-    
-    // Product Slider 3 Column
-    $('.product-slider-3').slick({
-        autoplay: true,
-        infinite: true,
-        dots: false,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        responsive: [
-            {
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 3,
-                }
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 2,
-                }
-            },
-            {
-                breakpoint: 576,
-                settings: {
-                    slidesToShow: 1,
-                }
-            },
-        ]
-    });
-    
-    
-    // Product Detail Slider
-    $('.product-slider-single').slick({
-        infinite: true,
-        autoplay: true,
-        dots: false,
-        fade: true,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        asNavFor: '.product-slider-single-nav'
-    });
-    $('.product-slider-single-nav').slick({
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        dots: false,
-        centerMode: true,
-        focusOnSelect: true,
-        asNavFor: '.product-slider-single'
-    });
-    
-    
-    // Brand Slider
-    $('.brand-slider').slick({
-        speed: 5000,
-        autoplay: true,
-        autoplaySpeed: 0,
-        cssEase: 'linear',
-        slidesToShow: 5,
-        slidesToScroll: 1,
-        infinite: true,
-        swipeToSlide: true,
-        centerMode: true,
-        focusOnSelect: false,
-        arrows: false,
-        dots: false,
-        responsive: [
-            {
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 4,
-                }
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 3,
-                }
-            },
-            {
-                breakpoint: 576,
-                settings: {
-                    slidesToShow: 2,
-                }
-            },
-            {
-                breakpoint: 300,
-                settings: {
-                    slidesToShow: 1,
-                }
-            }
-        ]
-    });
-    
-    
-    // Review slider
-    $('.review-slider').slick({
-        autoplay: true,
-        dots: false,
-        infinite: true,
-        slidesToShow: 2,
-        slidesToScroll: 1,
-        responsive: [
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 1,
-                }
-            }
-        ]
-    });
-    
-    
-    // Widget slider
-    $('.sidebar-slider').slick({
-        autoplay: true,
-        dots: false,
-        infinite: true,
-        slidesToShow: 1,
-        slidesToScroll: 1
-    });
-    
-    
-    // Quantity
-    $('.qty button').on('click', function () {
-        var $button = $(this);
-        var oldValue = $button.parent().find('input').val();
-        if ($button.hasClass('btn-plus')) {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 0;
-            }
-        }
-        $button.parent().find('input').val(newVal);
-    });
-    
-    
-    // Shipping address show hide
-    $('.checkout #shipto').change(function () {
-        if($(this).is(':checked')) {
-            $('.checkout .shipping-address').slideDown();
-        } else {
-            $('.checkout .shipping-address').slideUp();
-        }
-    });
-    
-    
-    // Payment methods show hide
-    $('.checkout .payment-method .custom-control-input').change(function () {
-        if ($(this).prop('checked')) {
-            var checkbox_id = $(this).attr('id');
-            $('.checkout .payment-method .payment-content').slideUp();
-            $('#' + checkbox_id + '-show').slideDown();
-        }
-    });
-})(jQuery);
+(function($) {
+	"use strict"
 
+	// Mobile Nav toggle
+	$('.menu-toggle > a').on('click', function (e) {
+		e.preventDefault();
+		$('#responsive-nav').toggleClass('active');
+	})
+
+	// Fix cart dropdown from closing
+	$('.cart-dropdown').on('click', function (e) {
+		e.stopPropagation();
+	});
+
+	/////////////////////////////////////////
+
+	// Products Slick
+	$('.products-slick').each(function() {
+		var $this = $(this),
+				$nav = $this.attr('data-nav');
+
+		$this.slick({
+			slidesToShow: 4,
+			slidesToScroll: 1,
+			autoplay: true,
+			infinite: true,
+			speed: 300,
+			dots: false,
+			arrows: true,
+			appendArrows: $nav ? $nav : false,
+			responsive: [{
+	        breakpoint: 991,
+	        settings: {
+	          slidesToShow: 2,
+	          slidesToScroll: 1,
+	        }
+	      },
+	      {
+	        breakpoint: 480,
+	        settings: {
+	          slidesToShow: 1,
+	          slidesToScroll: 1,
+	        }
+	      },
+	    ]
+		});
+	});
+
+	// Products Widget Slick
+	$('.products-widget-slick').each(function() {
+		var $this = $(this),
+				$nav = $this.attr('data-nav');
+
+		$this.slick({
+			infinite: true,
+			autoplay: true,
+			speed: 300,
+			dots: false,
+			arrows: true,
+			appendArrows: $nav ? $nav : false,
+		});
+	});
+
+	/////////////////////////////////////////
+
+	// Product Main img Slick
+	$('#product-main-img').slick({
+    infinite: true,
+    speed: 300,
+    dots: false,
+    arrows: true,
+    fade: true,
+    asNavFor: '#product-imgs',
+  });
+
+	// Product imgs Slick
+  $('#product-imgs').slick({
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    arrows: true,
+    centerMode: true,
+    focusOnSelect: true,
+		centerPadding: 0,
+		vertical: true,
+    asNavFor: '#product-main-img',
+		responsive: [{
+        breakpoint: 991,
+        settings: {
+					vertical: false,
+					arrows: false,
+					dots: true,
+        }
+      },
+    ]
+  });
+
+	// Product img zoom
+	var zoomMainProduct = document.getElementById('product-main-img');
+	if (zoomMainProduct) {
+		$('#product-main-img .product-preview').zoom();
+	}
+
+	/////////////////////////////////////////
+
+	// Input number
+	$('.input-number').each(function() {
+		var $this = $(this),
+		$input = $this.find('input[type="number"]'),
+		up = $this.find('.qty-up'),
+		down = $this.find('.qty-down');
+
+		down.on('click', function () {
+			var value = parseInt($input.val()) - 1;
+			value = value < 1 ? 1 : value;
+			$input.val(value);
+			$input.change();
+			updatePriceSlider($this , value)
+		})
+
+		up.on('click', function () {
+			var value = parseInt($input.val()) + 1;
+			$input.val(value);
+			$input.change();
+			updatePriceSlider($this , value)
+		})
+	});
+
+	var priceInputMax = document.getElementById('price-max'),
+			priceInputMin = document.getElementById('price-min');
+
+	priceInputMax.addEventListener('change', function(){
+		updatePriceSlider($(this).parent() , this.value)
+	});
+
+	priceInputMin.addEventListener('change', function(){
+		updatePriceSlider($(this).parent() , this.value)
+	});
+
+	function updatePriceSlider(elem , value) {
+		if ( elem.hasClass('price-min') ) {
+			console.log('min')
+			priceSlider.noUiSlider.set([value, null]);
+		} else if ( elem.hasClass('price-max')) {
+			console.log('max')
+			priceSlider.noUiSlider.set([null, value]);
+		}
+	}
+
+	// Price Slider
+	var priceSlider = document.getElementById('price-slider');
+	if (priceSlider) {
+		noUiSlider.create(priceSlider, {
+			start: [1, 999],
+			connect: true,
+			step: 1,
+			range: {
+				'min': 1,
+				'max': 999
+			}
+		});
+
+		priceSlider.noUiSlider.on('update', function( values, handle ) {
+			var value = values[handle];
+			handle ? priceInputMax.value = value : priceInputMin.value = value
+		});
+	}
+
+})(jQuery);
